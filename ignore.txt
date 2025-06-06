@@ -1,0 +1,7 @@
+angle-android
+atuin
+cabal-install
+ghc
+pandoc
+shellcheck
+wasi-libc

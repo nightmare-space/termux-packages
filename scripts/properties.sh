@@ -461,7 +461,7 @@ TERMUX__REPOS_HOST_ORG_URL="https://github.com/$TERMUX__REPOS_HOST_ORG_NAME"
 #
 # Default value: `com.termux`
 ##
-TERMUX_APP__PACKAGE_NAME="com.termux"
+TERMUX_APP__PACKAGE_NAME="com.nightmare.neo"
 TERMUX_APP_PACKAGE="$TERMUX_APP__PACKAGE_NAME" # Deprecated alternative variable for `TERMUX_APP__PACKAGE_NAME`
 
 __termux_build_props__add_variables_validator_actions "TERMUX_APP__PACKAGE_NAME" "app_package_name"
@@ -1831,7 +1831,7 @@ TERMUX_APP__REPO_URL="$TERMUX__REPOS_HOST_ORG_URL/$TERMUX_APP__REPO_NAME"
 #
 # Default value: `com.termux`
 ##
-TERMUX_APP__NAMESPACE="com.termux"
+TERMUX_APP__NAMESPACE="com.nightmare.neo"
 
 __termux_build_props__add_variables_validator_actions "TERMUX_APP__NAMESPACE" "app_package_name"
 
@@ -2163,13 +2163,13 @@ TERMUX_AM_APP__AM_CLASS__CLASS_NAME="$TERMUX_AM_APP__NAMESPACE.Am"
 # and are compiled locally.
 # FIXME: Checking for all variables will be added later in repo
 # changes pull, currently only `TERMUX_REPO_APP__PACKAGE_NAME` is checked.
-TERMUX_REPO_APP__PACKAGE_NAME="com.termux"
-TERMUX_REPO_APP__DATA_DIR="/data/data/com.termux"
-TERMUX_REPO__CORE_DIR="/data/data/com.termux/termux/core"
-TERMUX_REPO__APPS_DIR="/data/data/com.termux/termux/app"
-TERMUX_REPO__ROOTFS="/data/data/com.termux/files"
-TERMUX_REPO__HOME="/data/data/com.termux/files/home"
-TERMUX_REPO__PREFIX="/data/data/com.termux/files/usr"
+TERMUX_REPO_APP__PACKAGE_NAME="com.nightmare.neo"
+TERMUX_REPO_APP__DATA_DIR="/data/data/com.nightmare.neo"
+TERMUX_REPO__CORE_DIR="/data/data/com.nightmare.neo/termux/core"
+TERMUX_REPO__APPS_DIR="/data/data/com.nightmare.neo/termux/app"
+TERMUX_REPO__ROOTFS="/data/data/com.nightmare.neo/files"
+TERMUX_REPO__HOME="/data/data/com.nightmare.neo/files/home"
+TERMUX_REPO__PREFIX="/data/data/com.nightmare.neo/files/usr"
 
 
 

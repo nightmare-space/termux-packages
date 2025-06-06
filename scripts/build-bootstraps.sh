@@ -26,7 +26,8 @@ BOOTSTRAP_ANDROID10_COMPATIBLE=false
 # By default, bootstrap archives will be built for all architectures
 # supported by Termux application.
 # Override with option '--architectures'.
-TERMUX_DEFAULT_ARCHITECTURES=("aarch64" "arm" "i686" "x86_64")
+# TERMUX_DEFAULT_ARCHITECTURES=("aarch64" "arm" "i686" "x86_64")
+TERMUX_DEFAULT_ARCHITECTURES=("aarch64")
 TERMUX_ARCHITECTURES=("${TERMUX_DEFAULT_ARCHITECTURES[@]}")
 
 TERMUX_PACKAGES_DIRECTORY="/home/builder/termux-packages"
@@ -429,7 +430,7 @@ main() {
 
 		# Core utilities.
 		PACKAGES+=("bash") # Used by `termux-bootstrap-second-stage.sh`
-		PACKAGES+=("bzip2")
+		# PACKAGES+=("bzip2")
 		if ! ${BOOTSTRAP_ANDROID10_COMPATIBLE}; then
 			PACKAGES+=("command-not-found")
 		else

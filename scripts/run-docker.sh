@@ -56,6 +56,14 @@ $SUDO docker start $CONTAINER_NAME >/dev/null 2>&1 || {
 		--init \
 		--name $CONTAINER_NAME \
 		--volume $VOLUME \
+        --env HTTP_PROXY=http://host.docker.internal:7890 \
+        --env HTTPS_PROXY=http://host.docker.internal:7890 \
+        --env http_proxy=http://host.docker.internal:7890 \
+        --env https_proxy=http://host.docker.internal:7890 \
+        --env all_proxy=socks5://host.docker.internal:7891 \
+        --env NO_PROXY=localhost,127.0.0.1 \
+        --env no_proxy=localhost,127.0.0.1 \
+        --add-host=host.docker.internal:host-gateway \
 		$SEC_OPT \
 		--tty \
 		$TERMUX_BUILDER_IMAGE_NAME

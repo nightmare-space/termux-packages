@@ -1,0 +1,1 @@
+rsync -vr debian-repo root@nightmare.press:/home/web_static   chmod +

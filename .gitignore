@@ -28,7 +28,7 @@ checksum*
 
 # Built *.deb files.
 /debs/
-/output/
+/output*/
 
 # Preinstalled build tools.
 /build-tools/
@@ -40,3 +40,4 @@ checksum*
 
 # Temp .git directories for packages built from local sources "file://"
 /*.git
+/debian-repo

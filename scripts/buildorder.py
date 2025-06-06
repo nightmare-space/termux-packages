@@ -265,7 +265,6 @@ def read_packages_from_directories(directories, fast_build_mode, full_buildmode)
             if fast_build_mode or not isinstance(pkg, TermuxSubPackage):
                 dep_pkg.needed_by.add(pkg)
     return pkgs_map
-
 def generate_full_buildorder(pkgs_map):
     "Generate a build order for building all packages."
     build_order = []
@@ -289,6 +288,9 @@ def generate_full_buildorder(pkgs_map):
         for subpkg in pkg.subpkgs:
             remaining_deps[subpkg.name] = set(subpkg.deps)
 
+    # 存储包含循环依赖的包名，后续会跳过它们
+    skip_packages = set()
+
     while pkg_queue:
         pkg = pkg_queue.pop(0)
         if pkg.name in visited:
@@ -310,12 +312,16 @@ def generate_full_buildorder(pkgs_map):
                 pkg_queue.append(other_pkg)  # should be processed
 
     if set(pkgs_map.values()) != set(build_order):
-        print("ERROR: Cycle exists. Remaining: ", file=sys.stderr)
+        print("警告: 检测到循环依赖. 正在分析循环依赖的包:", file=sys.stderr)
+        
+        # 记录包含循环依赖的包名
+        remaining_pkgs = set()
         for name, pkg in pkgs_map.items():
             if pkg not in build_order:
-                print(name, remaining_deps[name], file=sys.stderr)
+                remaining_pkgs.add(name)
+                print(f"  {name}: {remaining_deps[name]}", file=sys.stderr)
 
-        # Print cycles so we have some idea where to start fixing this.
+        # 分析并输出循环
         def find_cycles(deps, pkg, path):
             """Yield every dependency path containing a cycle."""
             if pkg in path:
@@ -326,17 +332,28 @@ def generate_full_buildorder(pkgs_map):
 
         cycles = set()
         for pkg in remaining_deps:
-            for path_with_cycle in find_cycles(remaining_deps, pkg, []):
-                # Cut the path down to just the cycle.
-                cycle_start = path_with_cycle.index(path_with_cycle[-1])
-                cycles.add(tuple(path_with_cycle[cycle_start:]))
+            if pkg in remaining_pkgs:
+                for path_with_cycle in find_cycles(remaining_deps, pkg, []):
+                    # Cut the path down to just the cycle.
+                    cycle_start = path_with_cycle.index(path_with_cycle[-1])
+                    cycle = tuple(path_with_cycle[cycle_start:])
+                    cycles.add(cycle)
+                    # 将循环中的所有包添加到跳过列表
+                    skip_packages.update(cycle)
+        
+        print("\n发现以下循环依赖:", file=sys.stderr)
         for cycle in sorted(cycles):
-            print(f"cycle: {' -> '.join(cycle)}", file=sys.stderr)
-
-        sys.exit(1)
+            print(f"  循环: {' -> '.join(cycle)}", file=sys.stderr)
+            
+        print("\n跳过这些包含循环依赖的包，继续构建其他包...", file=sys.stderr)
+        
+        # 尝试处理剩余的包，避开循环依赖
+        for name, pkg in pkgs_map.items():
+            if pkg not in build_order and name not in skip_packages:
+                # 添加不在循环中的剩余包
+                build_order.append(pkg)
 
     return build_order
-
 def generate_target_buildorder(target_path, pkgs_map, fast_build_mode):
     "Generate a build order for building the dependencies of the specified package."
     if target_path.endswith('/'):
